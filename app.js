@@ -59,13 +59,21 @@ function setGrid(squareSize) {
 function mouseEvents(grid, color) {
 
     let mouseDown = false;
+    let rightMouseDown = false;
+
     document.body.addEventListener('mousedown', (e) => {
-        mouseDown = true;
+        if(e.button == 0) mouseDown = true;
+        if(e.button == 2) rightMouseDown = true;
 
     })
 
     document.body.addEventListener('mouseup', (e) => {
         mouseDown = false;
+        rightMouseDown = false;
+    })
+
+    grid.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
     })
 
     //  Attach event listener
@@ -78,7 +86,8 @@ function mouseEvents(grid, color) {
     // color square black when clicked.
     grid.addEventListener('mousedown', (e) => {
         e.preventDefault();
-        e.target.style.background = `${squareColor}`;
+        if(e.button == 0) e.target.style.background = `${squareColor}`;
+        if(e.button == 2) e.target.style.background = `white`;
     })
 
     // color square black when mouse is held and moving.
@@ -88,6 +97,10 @@ function mouseEvents(grid, color) {
             if(mouseDown) {
                 mm.target.style.background = `${squareColor}`;
             }
+            if (rightMouseDown) {
+                mm.target.style.background = `white`;
+            }
+            
         });
     });
 }
@@ -172,7 +185,7 @@ function setColor() {
     colorBox.setAttribute('style','width: 8em');
     
     const colorTitle = document.createElement('div');
-    colorTitle.textContent = 'Pick square color';
+    colorTitle.textContent = 'Pick a color';
 
     colorField.append(colorTitle);
     colorField.append(colorBox);
